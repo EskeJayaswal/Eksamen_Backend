@@ -31,9 +31,9 @@ public class User implements Serializable {
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
-    private Owner owner;
+    //@OneToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "owner_id", referencedColumnName = "id")
+    //private Owner owner;
 
 
 
@@ -93,11 +93,4 @@ public class User implements Serializable {
         roleList.add(userRole);
     }
 
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
 }

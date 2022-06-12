@@ -1,6 +1,5 @@
 package facades;
 
-import entities.Owner;
 import entities.Role;
 import entities.User;
 import javax.persistence.EntityManager;
@@ -50,7 +49,7 @@ public class UserFacade {
 
 
 
-    public User create(User user, Owner owner) {
+    /*public User create(User user, Owner owner) {
         EntityManager em = getEntityManager();
         Role role = em.find(Role.class, "user");
         user.addRole(role);
@@ -64,5 +63,5 @@ public class UserFacade {
             em.close();
         }
         return user;
-    }
+    }*/
 }

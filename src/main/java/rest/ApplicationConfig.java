@@ -28,9 +28,6 @@ public class ApplicationConfig extends Application {
         //resources.add(security.SignupEndpoint.class);
 
         //resources.add(rest.RenameMeResource.class);
-        resources.add(rest.BoatResource.class);
-        resources.add(rest.OwnerResource.class);
-        resources.add(rest.HarbourResource.class);
         resources.add(rest.DemoResource.class);
         resources.add(SetupResource.class);
     }

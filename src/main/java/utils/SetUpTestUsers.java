@@ -1,7 +1,6 @@
 package utils;
 
 
-import entities.Owner;
 import entities.Role;
 import entities.User;
 
@@ -25,8 +24,8 @@ public class SetUpTestUsers {
         User admin = new User("admin", "test123");
         User both = new User("user_admin", "test123");
 
-        Owner p1 = new Owner("Karsten", "Poulsen", "12345");
-        Owner p2 = new Owner("Leif", "Pavesen", "763291");
+        //Owner p1 = new Owner("Karsten", "Poulsen", "12345");
+        //Owner p2 = new Owner("Leif", "Pavesen", "763291");
         // OBS: Admin doesnt get a regular user owner
 
 
@@ -41,14 +40,14 @@ public class SetUpTestUsers {
         both.addRole(userRole);
         both.addRole(adminRole);
 
-        user.setOwner(p1);
-        both.setOwner(p2);
+        //user.setOwner(p1);
+        //both.setOwner(p2);
 
         em.persist(userRole);
         em.persist(adminRole);
 
-        em.persist(p1);
-        em.persist(p2);
+        //em.persist(p1);
+        //em.persist(p2);
 
         em.persist(user);
         em.persist(admin);
