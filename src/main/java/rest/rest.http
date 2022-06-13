@@ -41,7 +41,7 @@ Content-Type: application/json
 GET http://localhost:8080/eksamen_war_exploded/api/rental
 
 ###
-GET http://localhost:8080/eksamen_war_exploded/api/rental/2
+GET http://localhost:8080/eksamen_war_exploded/api/rental/1
 
 ###
 POST http://localhost:8080/eksamen_war_exploded/api/rental
@@ -103,3 +103,6 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8080/eksamen_war_exploded/api/rental/house/2
+
+###
+GET http://localhost:8080/eksamen_war_exploded/api/house/users/1

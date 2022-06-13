@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.HouseDTO;
 import dtos.RentalDTO;
+import dtos.UserDTO;
 import entities.House;
 import entities.Rental;
+import entities.User;
 import errorhandling.NotFoundException;
 import facades.HouseFacade;
 import utils.EMF_Creator;
@@ -58,6 +60,20 @@ public class HouseResource {
         return Response.ok().entity(GSON.toJson(rentalDTOS)).build();
     }
 
+    @GET
+    @Path("/users/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUsersByHouseId(@PathParam("id") Long id) throws NotFoundException {
+
+        List<User> users = FACADE.getUsersByHouseId(id);
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        for (User user : users) {
+            userDTOS.add(new UserDTO(user));
+        }
+        return Response.ok().entity(GSON.toJson(userDTOS)).build();
+    }
+
     // Create
     @POST
     @Produces({MediaType.APPLICATION_JSON})
@@ -91,6 +107,8 @@ public class HouseResource {
         House house = FACADE.addRelation(id1,id2);
         return Response.ok().entity(GSON.toJson(new HouseDTO(house))).build();
     }
+
+
 
     /*@Path("/remove/{id1}")
     @DELETE

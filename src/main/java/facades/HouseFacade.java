@@ -2,6 +2,7 @@ package facades;
 
 import entities.House;
 import entities.Rental;
+import entities.User;
 import errorhandling.NotFoundException;
 
 import javax.persistence.EntityManager;
@@ -15,7 +16,8 @@ public class HouseFacade implements IFacade<House> {
     private static EntityManagerFactory emf;
     private static HouseFacade instance;
 
-    private HouseFacade() {}
+    private HouseFacade() {
+    }
 
     public static HouseFacade getFacade(EntityManagerFactory _emf) {
         if (instance == null) {
@@ -105,8 +107,8 @@ public class HouseFacade implements IFacade<House> {
     @Override
     public long getCount() {
         EntityManager em = emf.createEntityManager();
-        try{
-            return (Long)em.createQuery("SELECT COUNT(z) FROM House z").getSingleResult();
+        try {
+            return (Long) em.createQuery("SELECT COUNT(z) FROM House z").getSingleResult();
         } finally {
             em.close();
         }
@@ -117,12 +119,12 @@ public class HouseFacade implements IFacade<House> {
 
         try {
             House house = em.find(House.class, id1);
-            if(house == null) {
+            if (house == null) {
                 throw new NotFoundException("Entity with id " + id1 + " was not found");
             }
 
             Rental rental = em.find(Rental.class, id2);
-            if(rental == null) {
+            if (rental == null) {
                 throw new NotFoundException("Entity with id" + id2 + " was not found");
             }
 
@@ -151,4 +153,23 @@ public class HouseFacade implements IFacade<House> {
         return rentals;
     }
 
+    public List<User> getUsersByHouseId(Long id) throws NotFoundException {
+
+        RentalFacade rentalFacade = RentalFacade.getFacade(emf);
+        List<User> userList = new ArrayList<>();
+        List<Rental> rentals = new ArrayList<>();
+        House house = getById(id);
+
+        for (Rental rental : house.getRentalList()) {
+            rentals.add(rental);
+        }
+
+        for (Rental rental : rentals) {
+            List<User> users = rentalFacade.getUsersByRentalId(rental.getId());
+            for (User user : users) {
+                userList.add(user);
+            }
+        }
+     return userList;
+    }
 }
