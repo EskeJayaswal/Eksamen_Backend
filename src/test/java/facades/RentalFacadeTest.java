@@ -43,19 +43,14 @@ public class RentalFacadeTest {
         EntityManager em = emf.createEntityManager();
 
         User u1 = new User("jayas", "utavej", "bager", "jayas123","test123");
-        User u2 = new User("laust", "filevej", "designer","last123","test123");
 
         Rental r1 = new Rental("01/01/2020", "01/01/2022", 200000, 30000,"Lone");
-        Rental r2 = new Rental("06/06/2020", "06/06/2022", 20000, 5000,"Jakob");
 
         House h1 = new House("Birkevej", "kbh","4");
-        House h2 = new House("Lodevej", "kbh","7");
 
         r1.addUser(u1);
-        r2.addUser(u2);
 
         h1.addRental(r1);
-        h1.addRental(r2);
 
         try {
             em.getTransaction().begin();
@@ -64,11 +59,8 @@ public class RentalFacadeTest {
             em.createNamedQuery("House.deleteAllRows").executeUpdate();
 
             em.persist(u1);
-            em.persist(u2);
             em.persist(r1);
-            em.persist(r2);
             em.persist(h1);
-            em.persist(h2);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -92,9 +84,9 @@ public class RentalFacadeTest {
     void delete() throws NotFoundException {
         Rental rental = new Rental("01/01/2021","01/01/2016",120000,10000,"Leif");
         facade.create(rental);
-        assertEquals(3, facade.getCount());
-        facade.delete(1L);
         assertEquals(2, facade.getCount());
+        facade.delete(1L);
+        assertEquals(1, facade.getCount());
     }
 
     @Test
@@ -108,9 +100,8 @@ public class RentalFacadeTest {
 
     @Test
     public void getAll() {
-        int expected = 2;
         int actual = facade.getAll().size();
-        assertEquals(expected,actual);
+        assertEquals(1,actual);
     }
 
     @Test

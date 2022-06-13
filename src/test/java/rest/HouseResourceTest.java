@@ -2,6 +2,7 @@ package rest;
 
 import entities.House;
 import entities.Rental;
+import facades.ResetDB;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -67,12 +68,16 @@ public class HouseResourceTest {
     //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     @BeforeEach
     public void setUp() {
+        ResetDB.truncate(emf);
         EntityManager em = emf.createEntityManager();
         h1 = new House("Birkevej", "kbh","6");
+        Rental r1 = new Rental("01/01/2020", "01/01/2022", 200000, 30000,"Lone");
+        h1.addRental(r1);
 
         try {
             em.getTransaction().begin();
             em.createNamedQuery("House.deleteAllRows").executeUpdate();
+            em.persist(r1);
             em.persist(h1);
             em.getTransaction().commit();
         } finally {
@@ -122,6 +127,18 @@ public class HouseResourceTest {
                 .body("address", is("Jyllingevej"))
                 .body("city", is("kbh"))
                 .body("numberOfRooms",is("4"));
+    }
+
+    @Test
+    void getRentalsByHouseId() {
+        given()
+                .contentType("application/json")
+                .when()
+                .get("/house/rentals/1")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("startDate", equalTo(Arrays.asList("01/01/2020")));
     }
 
 }

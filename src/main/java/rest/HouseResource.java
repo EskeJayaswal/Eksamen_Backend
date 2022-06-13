@@ -108,13 +108,4 @@ public class HouseResource {
         return Response.ok().entity(GSON.toJson(new HouseDTO(house))).build();
     }
 
-
-
-    /*@Path("/remove/{id1}")
-    @DELETE
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response removeRelation(@PathParam("id1") Long id1) throws NotFoundException {
-        House house = FACADE.removeRelation(id1);
-        return Response.ok().entity(GSON.toJson(new HouseDTO(house))).build();
-    }*/
 }

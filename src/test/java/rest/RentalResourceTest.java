@@ -5,6 +5,7 @@ import entities.Rental;
 import entities.Role;
 import entities.User;
 import facades.RentalFacade;
+import facades.ResetDB;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -72,9 +73,9 @@ public class RentalResourceTest {
     //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     @BeforeEach
     public void setUp() {
+        ResetDB.truncate(emf);
         EntityManager em = emf.createEntityManager();
         r1 = new Rental("01/01/2020", "01/01/2022", 200000, 30000,"Lone");
-        r2 = new Rental("06/06/2020", "06/06/2022", 20000, 5000,"Jakob");
         User u1 = new User("Jørgen","12334","Bager","jørgen123","test123");
         House h1 = new House("Birkevej","KBH","12");
         r1.addUser(u1);
@@ -84,9 +85,8 @@ public class RentalResourceTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Rental.deleteAllRows").executeUpdate();
-            em.persist(r1);
-            em.persist(r2);
             em.persist(u1);
+            em.persist(r1);
             em.persist(h1);
             em.persist(userRole);
             em.persist(adminRole);
@@ -112,7 +112,7 @@ public class RentalResourceTest {
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .body("deposit", equalTo(Arrays.asList(30000,5000)));
+                .body("deposit", equalTo(Arrays.asList(30000)));
     }
 
     @Test
@@ -142,23 +142,6 @@ public class RentalResourceTest {
                 .body("contactPerson",is("Leif"));
     }
 
-   /* @Test
-    public void testDelete() {
-        Rental rental = new Rental("01/01/2021","01/01/2016",120000,10000,"Leif");
-        RentalFacade facade = RentalFacade.getFacade(emf);
-        facade.create(rental);
-
-        given()
-                .when()
-                .delete("/guest/1");
-        expect().statusCode(200)
-                .given()
-                .when()
-                .get("/guest/count")
-                .then()
-                .assertThat()
-                .body("count", equalTo(0));
-    }*/
 
     @Test
     public void getUserByRentalId() {
@@ -173,5 +156,15 @@ public class RentalResourceTest {
                 .body("name", equalTo(Arrays.asList("Jørgen")));
     }
 
-
+    @Test
+    void getHouseByRentalId() {
+        given()
+                .contentType("application/json")
+                .when()
+                .get("/rental/house/1")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("address", equalTo("Birkevej"));
+    }
 }

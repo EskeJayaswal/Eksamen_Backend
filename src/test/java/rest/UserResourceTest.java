@@ -1,8 +1,10 @@
 package rest;
 
+import entities.Rental;
 import entities.Role;
 import entities.User;
 import errorhandling.NotFoundException;
+import facades.ResetDB;
 import facades.RoleFacade;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
@@ -67,9 +69,13 @@ public class UserResourceTest {
     //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     @BeforeEach
     public void setUp() throws NotFoundException {
+        ResetDB.truncate(emf);
         EntityManager em = emf.createEntityManager();
         u1 = new User("jayas", "utavej", "bager", "jayas123","test123");
         u2 = new User("laust", "filevej", "designer","last123","test123");
+        Rental r1 = new Rental("01/01/2020", "01/01/2022", 200000, 30000,"Lone");
+
+        r1.addUser(u1);
         Role userRole = new Role("user");
 
         try {
@@ -77,6 +83,7 @@ public class UserResourceTest {
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
             em.persist(u1);
             em.persist(u2);
+            em.persist(r1);
             em.persist(userRole);
             em.getTransaction().commit();
         } finally {
@@ -112,18 +119,5 @@ public class UserResourceTest {
                 .statusCode(200)
                 .body("name",equalTo("laust"));
     }
-
-    @Test
-    public void getRentalsByUserName() {
-        given()
-                .contentType("application/json")
-                .when()
-                .get("/rentals/jayas123")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .body("startDate",equalTo(""));
-    }
-
 
 }
