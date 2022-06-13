@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import errorhandling.NotFoundException;
 import facades.SetupFacade;
 import utils.EMF_Creator;
 
@@ -22,7 +23,7 @@ public class SetupResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response setupDatabase() {
+    public Response setupDatabase() throws NotFoundException {
         JsonObject object = FACADE.setupDatabase();
         return Response
                 .ok(GSON.toJson(object))
