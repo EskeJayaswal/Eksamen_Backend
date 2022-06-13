@@ -4,6 +4,8 @@ import entities.Role;
 
 import com.google.gson.JsonObject;
 import errorhandling.NotFoundException;
+import populators.HousePopulator;
+import populators.RentalPopulator;
 import populators.RolePopulator;
 import utils.SetUpTestUsers;
 
@@ -38,8 +40,8 @@ public class SetupFacade {
 
         RolePopulator.populateRoles(emf);
         SetUpTestUsers.userPopulator(emf);
-        //RentalPopulator.pupolateRentals(emf);
-        //HousePopulator.populateHouse(emf);
+        RentalPopulator.populateRentals(emf);
+        HousePopulator.populateHouses(emf);
         JsonObject jo = new JsonObject();
         jo.addProperty("status", "SUCCESS");
         jo.addProperty("msg", "Database setup successfully");

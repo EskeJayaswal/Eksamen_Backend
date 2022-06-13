@@ -1,12 +1,8 @@
 package entities;
-
-import com.sun.org.apache.xerces.internal.impl.xs.opti.DefaultElement;
-import jdk.jfr.Name;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.DELETE;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,7 +35,7 @@ public class House implements Serializable {
     private String numberOfRooms;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "house")
-    private List<Rental> rentalList;
+    private List<Rental> rentalList = new ArrayList<>();
 
     public House() {
     }
@@ -48,6 +44,11 @@ public class House implements Serializable {
         this.address = address;
         this.city = city;
         this.numberOfRooms = numberOfRooms;
+    }
+
+    public void addRental(Rental rental) {
+        this.rentalList.add(rental);
+        rental.setHouse(this);
     }
 
     public Long getId() {

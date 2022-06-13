@@ -4,6 +4,7 @@ package utils;
 import entities.Role;
 import entities.User;
 import errorhandling.NotFoundException;
+import facades.RoleFacade;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,10 +13,11 @@ public class SetUpTestUsers {
 
     public static void main(String[] args) throws NotFoundException {
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
-
+        //userPopulator(emf);
     }
 
     public static void userPopulator(EntityManagerFactory emf) throws NotFoundException {
+
 
         EntityManager em = emf.createEntityManager();
 
@@ -25,48 +27,36 @@ public class SetUpTestUsers {
         // Also, either delete this file, when users are created or rename and add to .gitignore
         // Whatever you do DO NOT COMMIT and PUSH with the real passwords
 
-        //User user = new User("user", "test123");
-        //User admin = new User("admin", "test123");
-        //User both = new User("user_admin", "test123");
-
         User user = new User("Rolf", "34921235", "Proffessor", "user", "test123");
         User admin = new User("Leif", "21350314", "Stenhugger", "admin", "test123");
-        //User both = new User("user_admin", "test");
 
-        //Owner p1 = new Owner("Karsten", "Poulsen", "12345");
-        //Owner p2 = new Owner("Leif", "Pavesen", "763291");
         // OBS: Admin doesnt get a regular user owner
 
 
-        if (admin.getUserPass().equals("test") || user.getUserPass().equals("test"))
+        if(admin.getUserPass().equals("test")||user.getUserPass().equals("test"))
             throw new UnsupportedOperationException("You have not changed the passwords");
 
         em.getTransaction().begin();
-        Role userRole = new Role("user");
-        Role adminRole = new Role("admin");
+        // Role userRole = new Role("user");
+        // Role adminRole = new Role("admin");
+
+        Role userRole = RoleFacade.getRoleFacade(emf).getRoleByName("user");
+        Role adminRole = RoleFacade.getRoleFacade(emf).getRoleByName("admin");
         user.addRole(userRole);
         admin.addRole(adminRole);
-        //both.addRole(userRole);
-        //both.addRole(adminRole);
-
-        //user.setOwner(p1);
-        //both.setOwner(p2);
-
-        em.persist(userRole);
-        em.persist(adminRole);
-
-        //em.persist(p1);
-        //em.persist(p2);
 
         em.persist(user);
         em.persist(admin);
-        //em.persist(both);
 
         em.getTransaction().commit();
-        System.out.println("PW: " + user.getUserPass());
-        System.out.println("Testing user with OK password: " + user.verifyPassword("test"));
-        System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
-        System.out.println("Created TEST Users");
+        //System.out.println("PW: " + user.getUserPass());
+        //System.out.println("Testing user with OK password: " + user.verifyPassword("test"));
+        //System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
+        //System.out.println("Created TEST Users");
 
     }
+
 }
+
+
+

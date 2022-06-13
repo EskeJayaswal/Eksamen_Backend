@@ -26,8 +26,10 @@ public class ApplicationConfig extends Application {
         resources.add(security.errorhandling.NotAuthorizedExceptionMapper.class);
         resources.add(security.LoginEndpoint.class);
         //resources.add(security.SignupEndpoint.class);
-
         //resources.add(rest.RenameMeResource.class);
+        resources.add(rest.HouseResource.class);
+        resources.add(rest.RentalResource.class);
+        resources.add(rest.UserResource.class);
         resources.add(rest.DemoResource.class);
         resources.add(SetupResource.class);
     }

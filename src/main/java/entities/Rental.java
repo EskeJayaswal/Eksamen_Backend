@@ -2,8 +2,8 @@ package entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.DELETE;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -46,7 +46,7 @@ public class Rental implements Serializable {
     private String contactPerson;
 
     @ManyToMany(mappedBy = "rentalList")
-    private List<User> userList;
+    private List<User> userList = new ArrayList<>();
 
     @ManyToOne()
     @JoinColumn(name = "house_id")
@@ -69,6 +69,10 @@ public class Rental implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void addUser(User user) {
+        this.userList.add(user);
     }
 
     public String getStartDate() {

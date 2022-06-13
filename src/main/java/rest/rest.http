@@ -1,0 +1,100 @@
+### USERS ###
+
+GET http://localhost:8080/eksamen_war_exploded/api/user
+
+###
+GET http://localhost:8080/eksamen_war_exploded/api/user/3
+
+###
+POST http://localhost:8080/eksamen_war_exploded/api/user
+Content-Type: application/json
+
+{
+  "name": "Eske",
+  "Phone": "348349123",
+  "job": "data",
+  "userName": "eske123",
+  "userPass": "test123"
+}
+
+###
+PUT http://localhost:8080/eksamen_war_exploded/api/user/3
+Content-Type: application/json
+
+{
+"name": "Eske",
+"phone": "348349123",
+"job": "data",
+"userName": "jayas",
+"userPass": "test1234"
+}
+
+###
+PUT http://localhost:8080/eksamen_war_exploded/api/user/add/2/1
+Content-Type: application/json
+
+### RENTAL ###
+
+GET http://localhost:8080/eksamen_war_exploded/api/rental
+
+###
+GET http://localhost:8080/eksamen_war_exploded/api/rental/2
+
+###
+POST http://localhost:8080/eksamen_war_exploded/api/rental
+Content-Type: application/json
+
+{
+  "startDate": "02/01/2014",
+  "endDate": "02/01/2034",
+  "priceAnnual": 90000,
+  "deposit": 15000,
+  "contactPerson": "Björk"
+}
+
+###
+PUT http://localhost:8080/eksamen_war_exploded/api/rental/3
+Content-Type: application/json
+
+{
+  "startDate": "02/01/2014",
+  "endDate": "02/01/2038",
+  "priceAnnual": 90000,
+  "deposit": 15000,
+  "contactPerson": "Björk"
+}
+
+###
+PUT http://localhost:8080/eksamen_war_exploded/api/user/rental/add/1/1
+Content-Type: application/json
+
+### HOUSE ###
+GET http://localhost:8080/eksamen_war_exploded/api/house
+
+###
+GET http://localhost:8080/eksamen_war_exploded/api/house/2
+
+###
+POST http://localhost:8080/eksamen_war_exploded/api/house
+Content-Type: application/json
+
+{
+  "address": "Smedebakken",
+  "city": "Silkeborg",
+  "numberOfRooms": "5"
+}
+
+###
+PUT http://localhost:8080/eksamen_war_exploded/api/house/3
+Content-Type: application/json
+
+{
+  "address": "Smedebakken",
+  "city": "Silkeborg",
+  "numberOfRooms": "4"
+}
+
+###
+PUT http://localhost:8080/eksamen_war_exploded/api/house/add/1/1
+Content-Type: application/json
+

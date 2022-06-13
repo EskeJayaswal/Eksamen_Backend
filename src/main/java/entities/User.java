@@ -59,22 +59,19 @@ public class User implements Serializable {
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
 
-
-    //@OneToOne(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "owner_id", referencedColumnName = "id")
-    //private Owner owner;
-
-   // public User(String userName, String userPass) {
-      //  this.userName = userName;
-      //  this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
-   // }
+    public User(String name, String phone, String job) {
+        this.name = name;
+        this.phone = phone;
+        this.job = job;
+    }
 
     public User(String name, String phone, String job, String userName, String userPass) {
         this.name = name;
         this.phone = phone;
         this.job = job;
         this.userName = userName;
-        this.userPass = userPass;
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
+
     }
 
     public User(String userName) {
@@ -128,4 +125,50 @@ public class User implements Serializable {
         roleList.add(userRole);
     }
 
+    public void addRental(Rental rental) {
+        this.rentalList.add(rental);
+        if(!rental.getUserList().contains(this)) {
+            rental.addUser(this);
+        }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public List<Rental> getRentalList() {
+        return rentalList;
+    }
+
+    public void setRentalList(List<Rental> rentalList) {
+        this.rentalList = rentalList;
+    }
 }

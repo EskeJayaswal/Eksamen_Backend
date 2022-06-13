@@ -1,89 +1,56 @@
 package facades;
 
 import entities.Rental;
-import entities.Role;
 import entities.User;
+import errorhandling.NotFoundException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-
-import errorhandling.NotFoundException;
-import security.errorhandling.AuthenticationException;
-
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author lam@cphbusiness.dk
- */
-public class UserFacade implements IFacade<User>{
+public class RentalFacade implements IFacade<Rental> {
 
     private static EntityManagerFactory emf;
-    private static UserFacade instance;
+    private static RentalFacade instance;
 
-    private UserFacade() {
-    }
+    private RentalFacade() {}
 
-
-    public static UserFacade getUserFacade(EntityManagerFactory _emf) {
+    public static RentalFacade getFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new UserFacade();
+            instance = new RentalFacade();
         }
         return instance;
     }
 
-
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
-
-
-
-    public User getVerifiedUser(String username, String password) throws AuthenticationException {
-        EntityManager em = emf.createEntityManager();
-        User user;
-        try {
-            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.userName = '" + username + "'", User.class);
-            user = query.getSingleResult();
-            if (user == null || !user.verifyPassword(password)) {
-                throw new AuthenticationException("Invalid user name or password");
-
-            //user = em.find(User.class, username);
-            //if (user == null || !user.verifyPassword(password)) {
-              //  throw new AuthenticationException("Invalid user name or password");
-            }
-        } finally {
-            em.close();
-        }
-        return user;
-    }
-
     @Override
-    public User create(User user) {
+    public Rental create(Rental rental) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(user);
+            em.persist(rental);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
-        return user;
+        return rental;
     }
 
     @Override
-    public User update(User user) throws NotFoundException {
+    public Rental update(Rental rental) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
-        User found = em.find(User.class, user.getId());
+        Rental found = em.find(Rental.class, rental.getId());
         if (found == null) {
-            throw new NotFoundException("Entity with ID: " + user.getId() + " not found");
+            throw new NotFoundException("Entity with ID: " + rental.getId() + " not found");
         }
 
         // TODO: update values here
 
         try {
             em.getTransaction().begin();
-            User updated = em.merge(user);
+            Rental updated = em.merge(rental);
             em.getTransaction().commit();
             return updated;
         } finally {
@@ -92,9 +59,9 @@ public class UserFacade implements IFacade<User>{
     }
 
     @Override
-    public User delete(Long id) throws NotFoundException {
+    public Rental delete(Long id) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
-        User found = em.find(User.class, id);
+        Rental found = em.find(Rental.class, id);
         if (found == null) {
             throw new NotFoundException("Could not remove Entity with id: " + id);
         }
@@ -106,39 +73,42 @@ public class UserFacade implements IFacade<User>{
             return found;
         } finally {
             em.close();
-        }    }
+        }
+    }
 
     @Override
-    public User getById(Long id) throws NotFoundException {
+    public Rental getById(Long id) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
-        User user;
+        Rental rental;
         try {
-            user = em.find(User.class, id);
-            if (user == null) {
+            rental = em.find(Rental.class, id);
+            if (rental == null) {
                 throw new NotFoundException();
             }
         } finally {
             em.close();
         }
-        return user;    }
+        return rental;
+    }
 
     @Override
-    public List<User> getAll() {
+    public List<Rental> getAll() {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<User> query = em.createQuery("SELECT z FROM User z", User.class);
-        return query.getResultList();    }
+        TypedQuery<Rental> query = em.createQuery("SELECT z FROM Rental z", Rental.class);
+        return query.getResultList();
+    }
 
     @Override
     public long getCount() {
         EntityManager em = emf.createEntityManager();
         try{
-            return (Long)em.createQuery("SELECT COUNT(z) FROM User z").getSingleResult();
+            return (Long)em.createQuery("SELECT COUNT(z) FROM Rental z").getSingleResult();
         } finally {
             em.close();
         }
     }
 
-    public User addRelation(Long userId, Long rentalId) throws NotFoundException {
+    public Rental addRelation(Long rentalId, Long userId) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -153,9 +123,9 @@ public class UserFacade implements IFacade<User>{
                 throw new NotFoundException("Entity with id " + rentalId + " was not found");
             }
 
-            user.addRental(rental);
+            rental.addUser(user);
             em.getTransaction().begin();
-            User updated = em.merge(user);
+            Rental updated = em.merge(rental);
             em.getTransaction().commit();
             return updated;
 
@@ -164,4 +134,15 @@ public class UserFacade implements IFacade<User>{
         }
     }
 
+    public List<User> getUsersByRentalId(Long id) throws NotFoundException {
+
+        List<User> users = new ArrayList<>();
+        Rental rental = getById(id);
+
+        for (User user : rental.getUserList()) {
+            users.add(user);
+        }
+
+        return users;
+    }
 }
