@@ -1,5 +1,6 @@
 package facades;
 
+import entities.House;
 import entities.Rental;
 import entities.User;
 import errorhandling.NotFoundException;
@@ -144,5 +145,14 @@ public class RentalFacade implements IFacade<Rental> {
         }
 
         return users;
+    }
+
+    public House getHouseByRentalId(Long id) throws NotFoundException {
+
+        Rental rental = getById(id);
+        System.out.println(rental.getHouse().getAddress());
+        House house = rental.getHouse();
+
+        return house;
     }
 }

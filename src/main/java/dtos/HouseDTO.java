@@ -22,9 +22,11 @@ public class HouseDTO {
         this.address = house.getAddress();
         this.city = house.getCity();
         this.numberOfRooms = house.getNumberOfRooms();
-        for (Rental rental : house.getRentalList()) {
-            this.rentals.add(rental.getId());
-            
+
+        if(house.getRentalList() != null) {
+            for (Rental rental : house.getRentalList()) {
+                this.rentals.add(rental.getId());
+            }
         }
     }
     public House getEntity() {

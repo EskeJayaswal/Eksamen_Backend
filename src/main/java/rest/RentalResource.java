@@ -2,8 +2,10 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.HouseDTO;
 import dtos.RentalDTO;
 import dtos.UserDTO;
+import entities.House;
 import entities.Rental;
 import entities.User;
 import errorhandling.NotFoundException;
@@ -96,4 +98,13 @@ public class RentalResource {
         return Response.ok().entity(GSON.toJson(new RentalDTO(rental))).build();
     }
 
+    @GET
+    @Path("/house/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getHouseByRentalId(@PathParam("id") Long id) throws NotFoundException {
+
+        System.out.println("im here");
+        House house = FACADE.getHouseByRentalId(id);
+        return Response.ok().entity(GSON.toJson(new HouseDTO(house))).build();
+    }
 }

@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 import errorhandling.NotFoundException;
 import security.errorhandling.AuthenticationException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,8 +60,10 @@ public class UserFacade implements IFacade<User>{
     }
 
     @Override
-    public User create(User user) {
+    public User create(User user) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
+        Role userRole = RoleFacade.getRoleFacade(emf).getRoleByName("user");
+        user.addRole(userRole);
         try {
             em.getTransaction().begin();
             em.persist(user);
@@ -162,6 +165,19 @@ public class UserFacade implements IFacade<User>{
         } finally {
             em.close();
         }
+    }
+
+
+    public List<Rental> getRentalByUserName(String username) {
+        EntityManager em = emf.createEntityManager();
+        User user;
+        try {
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.userName = '" + username + "'", User.class);
+            user = query.getSingleResult();
+        } finally {
+            em.close();
+        }
+        return user.getRentalList();
     }
 
 }

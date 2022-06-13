@@ -2,7 +2,9 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.RentalDTO;
 import dtos.UserDTO;
+import entities.Rental;
 import entities.User;
 import errorhandling.NotFoundException;
 import facades.UserFacade;
@@ -47,7 +49,7 @@ public class UserResource {
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(String content) {
+    public Response create(String content) throws NotFoundException {
         UserDTO dto = GSON.fromJson(content, UserDTO.class);
         User user = FACADE.create(dto.getEntityFull());
         return Response.ok().entity(GSON.toJson(new UserDTO(user))).build();
@@ -74,6 +76,19 @@ public class UserResource {
         return Response.ok().entity(GSON.toJson(new UserDTO(user))).build();
     }
 
+
+    @GET
+    @Path("/rentals/{username}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRentalsByUserId(@PathParam("username") String username) throws NotFoundException {
+        List<Rental> rentals = FACADE.getRentalByUserName(username);
+        List<RentalDTO> rentalDTOS = new ArrayList<>();
+        for (Rental rental : rentals) {
+            rentalDTOS.add(new RentalDTO(rental));
+
+        }
+        return Response.ok().entity(GSON.toJson(rentalDTOS)).build();
+    }
 
     /*@GET
     @Path("/role/{username}")
