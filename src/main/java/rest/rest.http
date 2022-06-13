@@ -6,7 +6,7 @@ GET http://localhost:8080/eksamen_war_exploded/api/user
 GET http://localhost:8080/eksamen_war_exploded/api/user/3
 
 ###
-GET http://localhost:8080/eksamen_war_exploded/api/user/rentals/user
+GET http://localhost:8080/eksamen_war_exploded/api/user/rentals/jayas
 
 ###
 POST http://localhost:8080/eksamen_war_exploded/api/user
@@ -48,8 +48,8 @@ POST http://localhost:8080/eksamen_war_exploded/api/rental
 Content-Type: application/json
 
 {
-  "startDate": "02/01/2014",
-  "endDate": "02/01/2034",
+  "startDate": "02/05/2014",
+  "endDate": "02/05/2034",
   "priceAnnual": 90000,
   "deposit": 15000,
   "contactPerson": "Björk"
@@ -66,6 +66,9 @@ Content-Type: application/json
   "deposit": 15000,
   "contactPerson": "Björk"
 }
+
+###
+DELETE http://localhost:8080/eksamen_war_exploded/api/rental/4
 
 ###
 PUT http://localhost:8080/eksamen_war_exploded/api/rental/add/1/1

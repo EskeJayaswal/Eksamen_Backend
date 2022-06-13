@@ -76,6 +76,17 @@ public class RentalResource {
         return Response.ok("SUCCESS").entity(GSON.toJson(updated)).build();
     }
 
+    @Path("{id}")
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response delete(@PathParam("id") Long id) throws NotFoundException {
+        RentalDTO deleted = new RentalDTO(FACADE.delete(id));
+        return Response
+                .ok("SUCCESS")
+                .entity(GSON.toJson(deleted))
+                .build();
+    }
+
     @GET
     @Path("/user/{id}")
     @Produces({MediaType.APPLICATION_JSON})

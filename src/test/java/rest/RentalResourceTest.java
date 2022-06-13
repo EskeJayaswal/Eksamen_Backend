@@ -4,6 +4,7 @@ import entities.House;
 import entities.Rental;
 import entities.Role;
 import entities.User;
+import facades.RentalFacade;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -140,6 +141,24 @@ public class RentalResourceTest {
                 .body("deposit",is(1000))
                 .body("contactPerson",is("Leif"));
     }
+
+   /* @Test
+    public void testDelete() {
+        Rental rental = new Rental("01/01/2021","01/01/2016",120000,10000,"Leif");
+        RentalFacade facade = RentalFacade.getFacade(emf);
+        facade.create(rental);
+
+        given()
+                .when()
+                .delete("/guest/1");
+        expect().statusCode(200)
+                .given()
+                .when()
+                .get("/guest/count")
+                .then()
+                .assertThat()
+                .body("count", equalTo(0));
+    }*/
 
     @Test
     public void getUserByRentalId() {

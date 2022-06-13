@@ -150,9 +150,9 @@ public class RentalFacade implements IFacade<Rental> {
     public House getHouseByRentalId(Long id) throws NotFoundException {
 
         Rental rental = getById(id);
-        System.out.println(rental.getHouse().getAddress());
         House house = rental.getHouse();
 
         return house;
     }
+
 }

@@ -98,7 +98,7 @@ public class UserResourceTest {
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .body("name", equalTo(Arrays.asList("jayas","laust")));
+                .body("name", equalTo(Arrays.asList("laust","jayas")));
     }
 
     @Test
@@ -110,7 +110,19 @@ public class UserResourceTest {
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .body("name",equalTo("jayas"));
+                .body("name",equalTo("laust"));
+    }
+
+    @Test
+    public void getRentalsByUserName() {
+        given()
+                .contentType("application/json")
+                .when()
+                .get("/rentals/jayas123")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("startDate",equalTo(""));
     }
 
 

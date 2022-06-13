@@ -1,15 +1,15 @@
 package facades;
 
+import entities.*;
 import entities.Rental;
-import entities.Rental;
-import entities.Role;
-import entities.User;
 import errorhandling.NotFoundException;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,8 +18,7 @@ public class UserFacadeTest {
 
     private static EntityManagerFactory emf;
     private static UserFacade facade;
-    User u1, u2;
-    Rental r1, r2;
+
 
     @BeforeAll
     public static void setUpClass() {
@@ -35,27 +34,37 @@ public class UserFacadeTest {
     // Setup the DataBase in a known state BEFORE EACH TEST
     @BeforeEach
     public void setUp() {
+        ResetDB.truncate(emf);
+
         EntityManager em = emf.createEntityManager();
+
+        User u1 = new User("jayas", "utavej", "bager", "jayas123","test123");
+        User u2 = new User("laust", "filevej", "designer","last123","test123");
+
+        Rental r1 = new Rental("01/01/2020", "01/01/2022", 200000, 30000,"Lone");
+        Rental r2 = new Rental("06/06/2020", "06/06/2022", 20000, 5000,"Jakob");
+
+        Role userRole = new Role("user");
+
+        House h1 = new House("Birkevej", "kbh","4");
+        House h2 = new House("Lodevej", "kbh","7");
+
+        h1.addRental(r1);
+        h2.addRental(r2);
+
+        r1.addUser(u1);
+        r2.addUser(u2);
+
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("User.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Rental.deleteAllRows").executeUpdate();
-
-            //u1 = new User("jayas", "utavej", "bager", "jayas123","test123");
-            //u2 = new User("laust", "filevej", "designer","last123","test123");
-            Role userRole = new Role("user");
-            Role adminRole = new Role("admin");
-
-           // r1 = new Rental("01/01/2020", "01/01/2022", 200000, 30000,"Lone");
-           // r2 = new Rental("06/06/2020", "06/06/2022", 20000, 5000,"Jakob");
-            //u1.addRental(r1);
-           // u2.addRental(r2);
-
+            //em.createNamedQuery("User.deleteAllRows").executeUpdate();
             em.persist(userRole);
-            em.persist(adminRole);
-
-          //  em.persist(r1);
-            //em.persist(r2);
+            em.persist(u1);
+            em.persist(u2);
+            em.persist(r1);
+            em.persist(r2);
+            em.persist(h1);
+            em.persist(h2);
 
             em.getTransaction().commit();
         } finally {
@@ -71,24 +80,17 @@ public class UserFacadeTest {
     @Test
     void create() throws NotFoundException {
         User expected = new User("Jørgen","12334","Bager","jørgen123","test123");
+
         User actual = facade.create(expected);
         assertEquals(expected.getId(), actual.getId());
     }
 
-    @Test
+   @Test
     void getById() throws NotFoundException {
-        User expected = u1;
-        User actual = facade.getById(u1.getId());
-        assertEquals(expected.getId(), actual.getId());
+       User actual = facade.getById(1L);
+       assertEquals(1L,actual.getId());
     }
 
-    @Test
-    void update() throws NotFoundException {
-        u1.setName("Peter");
-        User expected = u1;
-        User actual = facade.update(u1);
-        assertEquals(expected.getName(), actual.getName());
-    }
 
     @Test
     void getAll() {
@@ -98,9 +100,12 @@ public class UserFacadeTest {
 
     @Test
     void delete() throws NotFoundException {
-        User user = facade.delete(u2.getId());
-        int actual = facade.getAll().size();
-        assertEquals(1, actual);
+        User expected = new User("Jørgen","12334","Bager","jørgen123","test123");
+        facade.create(expected);
+        assertEquals(3, facade.getCount());
+        facade.delete(1L);
+        assertEquals(2, facade.getCount());
     }
+
 }
 

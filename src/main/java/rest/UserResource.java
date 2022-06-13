@@ -90,28 +90,5 @@ public class UserResource {
         return Response.ok().entity(GSON.toJson(rentalDTOS)).build();
     }
 
-    /*@GET
-    @Path("/role/{username}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getUserRole(@PathParam("username") String username) throws EntityNotFoundException {
-        String role = FACADE.getById(id);
-        return Response.ok().entity(GSON.toJson(pdto)).build();
-    }*/
-
-
-
-
-    /*
-
-    //TODO: NOT DONE YET
-    @POST
-    @Produces({MediaType.APPLICATION_JSON})
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(String content) {
-        ProfileDTO pdto = GSON.fromJson(content, ProfileDTO.class);
-        ProfileDTO newPdto = profileDTOIFacade.create(pdto);
-        return Response.ok().entity(GSON.toJson(newPdto)).build();
-    }*/
-
 
 }
