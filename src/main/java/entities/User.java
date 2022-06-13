@@ -13,7 +13,27 @@ import org.mindrot.jbcrypt.BCrypt;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "name")
+    private String name;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "phone")
+    private String phone;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "job")
+    private String job;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "user_name", length = 25)
@@ -25,21 +45,36 @@ public class User implements Serializable {
     @Column(name = "user_pass")
     private String userPass;
 
+    @JoinTable(
+            name = "user_rental",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "rental_id")
+    )
+    @ManyToMany
+    private List<Rental> rentalList;
+
     @JoinTable(name = "user_roles", joinColumns = {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
             @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
 
+
     //@OneToOne(cascade = CascadeType.ALL)
     //@JoinColumn(name = "owner_id", referencedColumnName = "id")
     //private Owner owner;
 
+   // public User(String userName, String userPass) {
+      //  this.userName = userName;
+      //  this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
+   // }
 
-
-    public User(String userName, String userPass) {
+    public User(String name, String phone, String job, String userName, String userPass) {
+        this.name = name;
+        this.phone = phone;
+        this.job = job;
         this.userName = userName;
-        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
+        this.userPass = userPass;
     }
 
     public User(String userName) {
